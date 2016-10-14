@@ -2,11 +2,11 @@
 
 module.exports = function (environment) {
   var ENV = {
-    modulePrefix: 'geoserver',
+    modulePrefix: 'ember-geoserver',
     environment: environment,
     rootURL: '/',
     locationType: 'auto',
-    podModulePrefix: 'geoserver/pods',
+    podModulePrefix: 'ember-geoserver/pods',
     EmberENV: {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
