@@ -7,6 +7,10 @@ module.exports = function (environment) {
     rootURL: '/',
     locationType: 'auto',
     podModulePrefix: 'ember-geoserver/pods',
+    pace: {
+      theme: 'minimal',
+      color: 'orange'
+    },
     EmberENV: {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
