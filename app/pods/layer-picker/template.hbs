@@ -1,6 +1,18 @@
+{{#cp-panel as |p|}}
+{{#p.toggle}}
+  <section class='edit-accordian text-black text-24'>
+    <span class='edit-open'>
+      <i class="icon-up"></i>
+    </span>
+    <span class='edit-closed'>
+      <i class="icon-edit"></i>
+    </span>
+       Edit Tile Layers
+  </section>
+{{/p.toggle}}
+{{#p.body}}
 <section >
   <div class="element-wrap">
-    <label for="layerOptions">Add a Layer</label>
     {{#power-select
       selection=currentSelection
       options=layersAvailable
@@ -38,3 +50,5 @@
   {{/if}}
   </div>
 </section>
+{{/p.body}}
+{{/cp-panel}}

@@ -36,3 +36,36 @@
   height: 600px;
   width: 100%;
 }
+.cp-is-open {
+  .edit-closed {
+    display:none;
+  }
+  .edit-open {
+    display: inline;
+  }
+}
+.edit-open {
+  display: none;
+}
+
+
+.cp-Panel-toggle {
+  display: block;
+  padding: 1em;
+}
+.cp-Panel-toggle:link {
+  text-decoration: none;
+}
+.cp-Panel-toggle:hover {
+  background-color: $grey-dark;
+}
+.cp-Panel-body-inner {
+  padding: 1em;
+  margin-bottom: 20px;
+}
+
+
+// make ember-dropdown-select go over leaflet zoom controls
+.ember-basic-dropdown-content {
+  z-index: 1001;
+}
