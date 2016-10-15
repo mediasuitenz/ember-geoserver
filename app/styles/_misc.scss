@@ -1,0 +1,33 @@
+/*************************************************
+  Miscellaneous Styles:
+**************************************************/
+
+
+
+/*************************************************
+  Styles that need reviewing/refinement:
+**************************************************/
+
+
+/* */
+
+.sortObject:hover {
+  background-color: $grey-dark;
+  transform: scale(1, 1.1);
+}
+
+// css class for default sort object state
+.sortObject {
+  padding: 0 10px;
+  button {
+    margin-top: 12px;
+  }
+  span {
+    margin-top: 12px;
+  }
+  background-color: $grey-light;
+}
+
+.button-bar {
+  padding: 10px
+}

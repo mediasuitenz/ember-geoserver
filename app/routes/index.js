@@ -22,7 +22,6 @@ export default Ember.Route.extend({
     layers: {refreshModel: true}
   },
   model (params) {
-    console.log('le params', params)
     return get(this, 'ajax').request('/geoserver/wms?service=wms&request=GetCapabilities&version=1.3.0', {
       dataType: 'xml'
     })

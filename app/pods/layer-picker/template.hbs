@@ -1,13 +1,40 @@
-<section>
-<label for="layerOptions">Add a Layer</label>
-<select class="" name="layerOptions">
-  <option>---</option>
-  {{#each layerOptions as |layer|}}
-    <option value="{{layer.name}}" onSelected{{action "didChooseLayer" layer}}>{{layer.title}}</option>
-  {{/each}}
-</select>
+<section >
+  <div class="element-wrap">
+    <label for="layerOptions">Add a Layer</label>
+    {{#power-select
+      selection=currentSelection
+      options=layersAvailable
+      onchange=(action "didChooseLayer")
+      as |layer|
+    }}
+      {{layer.title}}
+    {{/power-select}}
+  </div>
+  <div>
+    <ul class='no-list-style'>
+    {{#sortable-objects sortableObjectList=layersChosen sortEndAction='sortEndAction' sortingScope='a' }}
+      {{#each layersChosen as |layer|}}
+        {{#draggable-object content=layer  overrideClass='sortObject' isSortable=true sortingScope='a'}}
+          <div class='grid-row drag-object'>
+            <div class="col-2-3">
+              <ul class='nav-style'>
+                <li><i class="icon-menu text-grey-light nav-item" style="font-size:30px; padding-right:5px;"></i></li>
+                <li><span class='nav-item'>{{layer.title}}</span></li>
+              </ul>
+            </div>
+            <div class="col-1-3">
+              <button type="button" class='float-right default-btn-small' {{action "dropLayer" layer}}><i class="icon-delete"></i></button>
+            </div>
+          </div>
+        {{/draggable-object}}
+      {{/each}}
+    {{/sortable-objects}}
+    </ul>
 
-{{#if hasSelectedNewLayers}}
-  <button type="button" name="button">Load New Layers</button>
-{{/if}}
+  </div>
+  <div class="button-bar">
+  {{#if hasSelectedNewLayers}}
+    <button type="button" class='default-btn-primary float-right' {{action "layersUpdated" layersChosen}}>Load New Layer Configuration</button>
+  {{/if}}
+  </div>
 </section>

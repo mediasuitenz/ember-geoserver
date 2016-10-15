@@ -1,17 +1,6 @@
-<pre>
-  lat: {{model.lat}}
-</pre>
-<pre>
-  lng: {{model.lng}}
-</pre>
-<pre>
-  z: {{model.z}}
-</pre>
-<pre>
-{{model.layersChosen}}
-</pre>
-<pre>
-{{model.layersAvailable}}
-</pre>
+{{layer-picker
+  onLayerUpdate=(action "onLayerUpdate")
+  layersChosen=(readonly model.layersChosen)
+  layersAvailable=(readonly model.layersAvailable)}}
+
 {{outlet}}
-{{layer-picker layersChoosen=model.layersChosen layersAvailable=model.layersAvailable}}
