@@ -1,2 +1,17 @@
-<h1>Hello ember</h1>
+<pre>
+  lat: {{model.lat}}
+</pre>
+<pre>
+  lng: {{model.lng}}
+</pre>
+<pre>
+  z: {{model.z}}
+</pre>
+<pre>
+{{model.layersChosen}}
+</pre>
+<pre>
+{{model.layersAvailable}}
+</pre>
 {{outlet}}
+{{layer-picker layersChoosen=model.layersChosen layersAvailable=model.layersAvailable}}

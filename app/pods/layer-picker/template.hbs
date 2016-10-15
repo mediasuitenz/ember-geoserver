@@ -1,0 +1,13 @@
+<section>
+<label for="layerOptions">Add a Layer</label>
+<select class="" name="layerOptions">
+  <option>---</option>
+  {{#each layerOptions as |layer|}}
+    <option value="{{layer.name}}" onSelected{{action "didChooseLayer" layer}}>{{layer.title}}</option>
+  {{/each}}
+</select>
+
+{{#if hasSelectedNewLayers}}
+  <button type="button" name="button">Load New Layers</button>
+{{/if}}
+</section>
