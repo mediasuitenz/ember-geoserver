@@ -47,7 +47,7 @@ export default Ember.Route.extend({
   },
   actions: {
     mapClicked (e) {
-      console.log("we're sick nerds :nerdface:", e)
+      // console.log("we're sick nerds :nerdface:", e)
       const lat = e.latlng.lat
       const lng = e.latlng.lng
       const layername = 'mediasuite-public:landparcel-reprojection'
@@ -74,23 +74,23 @@ export default Ember.Route.extend({
         </wfs:Query>
       </wfs:GetFeature>`
 
-      return get(this, 'ajax').request('/geoserver/wfs', {
-        dataType: 'xml',
-        type: 'POST',
-        contentType: 'text/xml',
-        data: bboxQuery
-      })
-      .then(win => {
-        const exception = win.querySelector('ExceptionText')
-        if (exception) {
-          console.error('success response but error case', exception.innerHTML)
-          return Promise.reject(exception)
-        }
-        debugger
-      })
-      .catch(err => {
-        console.log('itbroke', err)
-      })
+      // return get(this, 'ajax').request('/geoserver/wfs', {
+      //   dataType: 'xml',
+      //   type: 'POST',
+      //   contentType: 'text/xml',
+      //   data: bboxQuery
+      // })
+      // .then(win => {
+      //   const exception = win.querySelector('ExceptionText')
+      //   if (exception) {
+      //     console.error('success response but error case', exception.innerHTML)
+      //     return Promise.reject(exception)
+      //   }
+      //   debugger
+      // })
+      // .catch(err => {
+      //   console.log('itbroke', err)
+      // })
     }
   }
 })
