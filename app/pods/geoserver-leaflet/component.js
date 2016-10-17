@@ -23,14 +23,22 @@ export default Ember.Component.extend({
       }
     }
   },
+
   didInsertElement () {
     this._super(...arguments)
+    const lat = get(this, 'lat') || auckland.lat
+    const lng = get(this, 'lng') || auckland.lng
+    const zoom = get(this, 'zoom') || 10
+
     const map = L.map(this.$('.leaflet-map-instance').get(0), {
-      center: L.latLng(auckland),
-      zoom: 10,
+      center: L.latLng(lat, lng),
+      zoom: zoom,
       continuousWorld: true,
       worldCopyJump: false
     })
+    map.on('zoomend', e => this.zoomOrMove(e))
+    map.on('moveend', e => this.zoomOrMove(e))
+    map.on('click', e => this.mapClicked(e))
     set(this, 'map', map)
     const layers = get(this, 'layers')
     this.updateMapWithLayer(map, layers)
@@ -41,5 +49,26 @@ export default Ember.Component.extend({
     let tileLayer = get(this, 'tileLayer')
     // TODO: only update mapWithLayer if layers have changed
     this.updateMapWithLayer(map, layers, tileLayer)
+
+    // update map position from attribute change
+    const lat = get(this, 'lat')
+    const lng = get(this, 'lng')
+    const zoom = get(this, 'zoom')
+
+    if (lat && lng && zoom) {
+      map.setView(L.latlng(lat, lng), zoom)
+    }
+  },
+  mapClicked (e) {
+    const onClick = get(this, 'onClick')
+    if (onClick) {
+      onClick(e)
+    }
+  },
+  zoomOrMove (e) {
+    const map = get(this, 'map')
+    const latLng = map.getCenter()
+    const zoom = map.getZoom()
+    get(this, 'mapViewChanged')({latLng, zoom})
   }
 })

@@ -4,6 +4,11 @@
   layersAvailable=(readonly model.layersAvailable)}}
 
 {{geoserver-leaflet
-  layers=model.layersChosen}}
+  layers=model.layersChosen
+  lat=(readonly model.lat)
+  lng=(readonly model.lng)
+  zoom=(readonly model.zoom)
+  onClick=(route-action "mapClicked")
+  mapViewChanged=(action "mapViewChanged")}}
 
 {{outlet}}

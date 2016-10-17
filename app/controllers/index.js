@@ -11,6 +11,11 @@ export default Ember.Controller.extend({
       get(this, 'layers')
       console.log('chosen Options', chosenOptions, chosenOptions.map(l => l.name).join(','))
       set(this, 'layers', chosenOptions.map(l => l.name).join(','))
+    },
+    mapViewChanged ({zoom, latLng}) {
+      set(this, 'z', zoom)
+      set(this, 'lat', latLng.lat)
+      set(this, 'lng', latLng.lng)
     }
   }
 })
