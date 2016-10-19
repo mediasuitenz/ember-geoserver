@@ -56,7 +56,7 @@ export default Ember.Component.extend({
     const zoom = get(this, 'zoom')
 
     if (lat && lng && zoom) {
-      map.setView(L.latlng(lat, lng), zoom)
+      map.setView(L.latLng(lat, lng), zoom)
     }
   },
   mapClicked (e) {
