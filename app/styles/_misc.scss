@@ -69,3 +69,9 @@
 .ember-basic-dropdown-content {
   z-index: 1001;
 }
+
+/** LEAFLET popup **/
+div.leaflet-popup-content-wrapper > div.leaflet-popup-content {
+  max-height: 200px;
+  overflow-y: scroll;
+}
