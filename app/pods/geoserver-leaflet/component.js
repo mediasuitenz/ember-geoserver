@@ -2,7 +2,7 @@ import Ember from 'ember'
 import L from 'npm:leaflet'
 import constants from 'ember-geoserver/constants'
 const {LAYER_TYPES} = constants
-const {set, get, inject} = Ember
+const {set, get, inject, run} = Ember
 const auckland = L.latLng(-36.85, 174.76)
 
 
@@ -17,12 +17,12 @@ export default Ember.Component.extend({
     const layerConfig = layers
       .filter(({type}) => type === LAYER_TYPES.WMS_LAYER)
       .map(l => l.name).join(',')
-      debugger
     if (!wmsLayer) {
       wmsLayer = L.tileLayer.wms('/geoserver/wms', {
         layers: layerConfig,
         format: 'image/png',
         transparent: true,
+        zIndex: 2,
         attribution: 'Sourced from Mediasuite'
       })
       set(this, 'wmsLayer', wmsLayer)
@@ -38,7 +38,9 @@ export default Ember.Component.extend({
       set(this, 'osmLayer', null)
     }
     if (osmLayerSelection) {
-      osmLayer = L.tileLayer(osmLayerSelection.url)
+      osmLayer = L.tileLayer(osmLayerSelection.url, {
+        zIndex: 1
+      })
       set(this, 'osmLayer', osmLayer)
       map.addLayer(osmLayer)
     }
@@ -129,11 +131,15 @@ export default Ember.Component.extend({
       map.addLayer(leafletPopup)
     }
   },
-  zoomOrMove (e) {
+  invokeViewChangeDebounced () {
     const map = get(this, 'map')
     const latLng = map.getCenter()
     const zoom = map.getZoom()
+    const viewChanged = get(this, 'mapViewChanged')
     get(this, 'mapViewChanged')({latLng, zoom})
+  },
+  zoomOrMove (e) {
+    run.debounce(this, this.invokeViewChangeDebounced, 700)
   },
   mapClicked (e) {
     // console.log("we're sick nerds :nerdface:", e)
@@ -218,7 +224,6 @@ function getDataFromFeatureDoc (el) {
 
   const model = getAttrsRecursive(el)
   const mergeAttrsToObject = (previous, current) => {
-    // debugger
     var key = Object.keys(current)[0]
     // if value is an array, objectificate it
     if (Array.isArray(current[key])) {
