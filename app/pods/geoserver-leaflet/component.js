@@ -1,27 +1,53 @@
 import Ember from 'ember'
 import L from 'npm:leaflet'
+import constants from 'ember-geoserver/constants'
+const {LAYER_TYPES} = constants
 const {set, get, inject} = Ember
 const auckland = L.latLng(-36.85, 174.76)
 
+
+const osmTileLayer = layers => layers.filter(({type}) => type === LAYER_TYPES.OSM_LAYER)
+
 export default Ember.Component.extend({
-  tileLayer: null,
+  wmsLayer: null,
+  osmLayer: null,
   map: null,
   ajax: inject.service(),
+  updateWMSLayer (map, layers, wmsLayer) {
+    const layerConfig = layers
+      .filter(({type}) => type === LAYER_TYPES.WMS_LAYER)
+      .map(l => l.name).join(',')
+      debugger
+    if (!wmsLayer) {
+      wmsLayer = L.tileLayer.wms('/geoserver/wms', {
+        layers: layerConfig,
+        format: 'image/png',
+        transparent: true,
+        attribution: 'Sourced from Mediasuite'
+      })
+      set(this, 'wmsLayer', wmsLayer)
+      map.addLayer(wmsLayer)
+    } else {
+      wmsLayer.setParams({layers: layerConfig})
+    }
+  },
+  updateOSMLayer(map, layers, osmLayer) {
+    const osmLayerSelection = layers.filter(({type}) => type === LAYER_TYPES.OSM_LAYER)[0]
+    if (osmLayer) {
+      osmLayer.remove()
+      set(this, 'osmLayer', null)
+    }
+    if (osmLayerSelection) {
+      osmLayer = L.tileLayer(osmLayerSelection.url)
+      set(this, 'osmLayer', osmLayer)
+      map.addLayer(osmLayer)
+    }
+  },
   // update the map wiht the new layers, or just update the new
-  updateMapWithLayer (map, layers, tileLayer) {
+  updateMapWithLayer (map, layers, wmsLayer, osmLayer) {
     if (layers.length) {
-      const layerConfig = layers.map(l => l.name).join(',')
-      if (!tileLayer) {
-        tileLayer = L.tileLayer.wms('/geoserver/wms', {
-          layers: layerConfig,
-          format: 'image/png',
-          attribution: 'Sourced from Mediasuite'
-        })
-        set(this, 'tileLayer', tileLayer)
-        map.addLayer(tileLayer)
-      } else {
-        tileLayer.setParams({layers: layerConfig})
-      }
+      this.updateOSMLayer(map, layers, osmLayer)
+      this.updateWMSLayer(map, layers, wmsLayer)
     }
   },
 
@@ -47,9 +73,10 @@ export default Ember.Component.extend({
   didUpdate () {
     const map = get(this, 'map')
     const layers = get(this, 'layers')
-    let tileLayer = get(this, 'tileLayer')
+    const wmsLayer = get(this, 'wmsLayer')
+    const osmLayer = get(this, 'osmLayer')
     // TODO: only update mapWithLayer if layers have changed
-    this.updateMapWithLayer(map, layers, tileLayer)
+    this.updateMapWithLayer(map, layers, wmsLayer, osmLayer)
 
     // update map position from attribute change
     const lat = get(this, 'lat')

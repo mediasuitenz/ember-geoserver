@@ -8,7 +8,6 @@ export default Ember.Controller.extend({
   layers: null,
   actions: {
     onLayerUpdate (chosenOptions) {
-      get(this, 'layers')
       set(this, 'layers', chosenOptions.map(l => l.name).join(','))
     },
     mapViewChanged ({zoom, latLng}) {

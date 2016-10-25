@@ -1,4 +1,6 @@
 import Ember from 'ember'
+import constants from 'ember-geoserver/constants'
+const {LAYER_TYPES} = constants
 const {inject, get} = Ember
 
 function getLayersFromResponse (xmlDoc) {
@@ -7,11 +9,21 @@ function getLayersFromResponse (xmlDoc) {
   layers.forEach(node => {
     model.push({
       title: node.querySelector('Title').innerHTML,
-      name: node.querySelector('Name').innerHTML
+      name: node.querySelector('Name').innerHTML,
+      type: LAYER_TYPES.WMS_LAYER
     })
   })
   return model
 }
+
+const osmLayers = [
+  {
+    name: 'osm_default',
+    title: 'OSM default layer',
+    url: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    type: LAYER_TYPES.OSM_LAYER
+  }
+]
 
 export default Ember.Route.extend({
   ajax: inject.service(),
@@ -26,7 +38,7 @@ export default Ember.Route.extend({
       dataType: 'xml'
     })
     .then(xmlDoc => {
-      const layersAvailable = getLayersFromResponse(xmlDoc)
+      const layersAvailable = osmLayers.concat(getLayersFromResponse(xmlDoc))
       let layersChosen = []
       if (params.layers) {
         layersChosen = params.layers.split(',').map(layerName => {
